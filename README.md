@@ -1,6 +1,6 @@
 # 🌐 TaskMate — Implementasi Document Object Model (DOM) JavaScript
 
-> Tugas Mata Kuliah Pemrograman Web: Sistem Sederhana Berbasis DOM JavaScript beserta Slide & Skrip Presentasi.
+> Tugas Mata Kuliah Pemrograman Web: Sistem Sederhana Berbasis DOM JavaScript beserta Slide Presentasi.
 
 ---
 
@@ -11,7 +11,6 @@
 Proyek ini juga dilengkapi dengan:
 1. **Aplikasi Web Interaktif** (`index.html`)
 2. **Slide Presentasi Web 17 Slide** (`presentasi.html`)
-3. **Panduan & Naskah Narasi Presentasi + Q&A** (`skrip-presentasi.html`)
 
 ---
 
@@ -49,7 +48,6 @@ Proyek ini juga dilengkapi dengan:
 ├── style.css               # Styling dark mode modern & responsive CSS
 ├── script.js               # Seluruh logika manipulasi DOM JavaScript
 ├── presentasi.html         # Slide presentasi interaktif (17 slide)
-├── skrip-presentasi.html   # Skrip naskah narasi, panduan live demo, & jawaban Q&A
 └── README.md               # Dokumentasi proyek
 ```
 
@@ -63,8 +61,6 @@ Tidak memerlukan instalasi server atau dependensi tambahan (`npm`, dll). Cukup b
    - Double-klik berkas `index.html` pada browser apa pun (Google Chrome, Mozilla Firefox, Microsoft Edge, dll).
 2. **Membuka Slide Presentasi:**
    - Buka berkas `presentasi.html` di browser. Gunakan tombol panah kanan (`→`) / Spasi untuk slide berikutnya, atau panah kiri (`←`) untuk slide sebelumnya.
-3. **Membaca Skrip Presentasi:**
-   - Buka berkas `skrip-presentasi.html` di browser untuk panduan berbicara per slide dan kunci jawaban tanya jawab.
 
 ---
 
