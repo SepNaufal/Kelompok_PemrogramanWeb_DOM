@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skrip & Panduan Presentasi — DOM JavaScript (TaskMate)</title>
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #182234;
+            --accent-purple: #8b5cf6;
+            --accent-indigo: #6366f1;
+            --accent-cyan: #06b6d4;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --text-speech: #e2e8f0;
+            --quote-bg: rgba(99, 102, 241, 0.08);
+            --quote-border: #6366f1;
+            --border-color: #334155;
+            --tag-bg: rgba(139, 92, 246, 0.2);
+            --tag-text: #c4b5fd;
+            --highlight-amber: #f59e0b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            line-height: 1.65;
+            display: flex;
+        }
+
+        /* Sidebar Navigation */
+        aside {
+            width: 320px;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            background-color: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            overflow-y: auto;
+            padding: 1.5rem 1rem;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .sidebar-header h2 {
+            font-size: 1.15rem;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .sidebar-header p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.2rem;
+        }
+
+        .nav-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .nav-list a {
+            display: block;
+            padding: 0.55rem 0.8rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-list a:hover {
+            color: var(--text-main);
+            background-color: rgba(255, 255, 255, 0.05);
+            border-left-color: var(--accent-indigo);
+        }
+
+        /* Main Content */
+        main {
+            flex: 1;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2.5rem 3rem 6rem;
+        }
+
+        header.main-header {
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .badge-pill {
+            display: inline-block;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.2));
+            border: 1px solid rgba(99, 102, 241, 0.4);
+            color: #c4b5fd;
+            padding: 0.3rem 0.85rem;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #a78bfa, #818cf8, #38bdf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.6rem;
+        }
+
+        .top-tip {
+            background-color: var(--quote-bg);
+            border-left: 4px solid var(--accent-indigo);
+            padding: 1rem 1.25rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            font-size: 0.95rem;
+            color: #cbd5e1;
+        }
+
+        /* Slide Cards */
+        .slide-section {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            scroll-margin-top: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+        }
+
+        .slide-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.2rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .slide-header h3 {
+            font-size: 1.35rem;
+            color: #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .slide-badge {
+            background: var(--tag-bg);
+            color: var(--tag-text);
+            padding: 0.2rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        /* Speech Script Block */
+        .speech-box {
+            background-color: var(--quote-bg);
+            border-left: 4px solid #6366f1;
+            padding: 1.2rem 1.4rem;
+            border-radius: 8px;
+            margin-bottom: 1.2rem;
+            position: relative;
+        }
+
+        .speech-box::before {
+            content: "🎙️ Contoh Ucapan / Narasi:";
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #a78bfa;
+            margin-bottom: 0.6rem;
+        }
+
+        .speech-box p {
+            font-size: 1.05rem;
+            color: var(--text-speech);
+            line-height: 1.7;
+            margin-bottom: 0.8rem;
+            font-style: normal;
+        }
+
+        .speech-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        .speech-box strong {
+            color: #f8fafc;
+        }
+
+        /* Key Points */
+        .points-box {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            margin-top: 1rem;
+        }
+
+        .points-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #38bdf8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.6rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .points-box ul {
+            padding-left: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .points-box li {
+            font-size: 0.95rem;
+            color: #cbd5e1;
+        }
+
+        .extra-tip {
+            margin-top: 1rem;
+            padding: 0.8rem 1rem;
+            background: rgba(245, 158, 11, 0.1);
+            border-left: 3px solid var(--highlight-amber);
+            border-radius: 6px;
+            font-size: 0.9rem;
+            color: #fde68a;
+        }
+
+        /* Q&A Section */
+        .qa-card {
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .qa-card h4 {
+            color: #f43f5e;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .qa-card p {
+            font-size: 0.95rem;
+            color: #cbd5e1;
+        }
+
+        /* Step by Step Demo */
+        .step-list {
+            list-style: none;
+            counter-reset: demo-counter;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .step-item {
+            counter-increment: demo-counter;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            padding: 0.8rem 1rem;
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .step-item::before {
+            content: counter(demo-counter);
+            background: var(--accent-indigo);
+            color: white;
+            font-size: 0.8rem;
+            font-weight: bold;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 0.15rem;
+        }
+
+        .step-content strong {
+            color: #38bdf8;
+            display: block;
+            margin-bottom: 0.2rem;
+        }
+
+        .step-content em {
+            color: #a78bfa;
+            font-style: italic;
+            font-size: 0.9rem;
+            display: block;
+            margin-top: 0.3rem;
+        }
+
+        /* Floating Back to Top */
+        .btn-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--accent-indigo);
+            color: white;
+            border: none;
+            padding: 0.6rem 1rem;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .btn-top:hover {
+            transform: translateY(-2px);
+            background: var(--accent-purple);
+        }
+
+        /* Print styles */
+        @media print {
+            body {
+                background: white;
+                color: #0f172a;
+            }
+            aside, .btn-top {
+                display: none;
+            }
+            main {
+                max-width: 100%;
+                padding: 1cm;
+            }
+            .slide-section {
+                background: white;
+                border: 1px solid #cbd5e1;
+                page-break-inside: avoid;
+                color: black;
+                box-shadow: none;
+            }
+            .speech-box {
+                background: #f8fafc;
+                border-left-color: #6366f1;
+            }
+            .speech-box p, .points-box li {
+                color: #334155;
+            }
+        }
+
+        @media (max-width: 860px) {
+            body {
+                flex-direction: column;
+            }
+            aside {
+                width: 100%;
+                height: auto;
+                position: relative;
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+            }
+            main {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar TOC -->
+    <aside>
+        <div class="sidebar-header">
+            <h2>📜 Daftar Slide</h2>
+            <p>Klik slide untuk langsung lompat ke narasinya</p>
+        </div>
+        <ul class="nav-list">
+            <li><a href="#slide-1">Slide 1: Judul</a></li>
+            <li><a href="#slide-2">Slide 2: Apa itu DOM?</a></li>
+            <li><a href="#slide-3">Slide 3: Struktur DOM Tree</a></li>
+            <li><a href="#slide-4">Slide 4: Jenis-Jenis Node</a></li>
+            <li><a href="#slide-5">Slide 5: Studi Kasus (TaskMate)</a></li>
+            <li><a href="#slide-6">Slide 6: 1. Seleksi Elemen</a></li>
+            <li><a href="#slide-7">Slide 7: 2. Manipulasi Konten</a></li>
+            <li><a href="#slide-8">Slide 8: 3. Buat & Hapus Elemen</a></li>
+            <li><a href="#slide-9">Slide 9: 4. Style & ClassList</a></li>
+            <li><a href="#slide-10">Slide 10: 5. Event Handling</a></li>
+            <li><a href="#slide-11">Slide 11: Jenis Event</a></li>
+            <li><a href="#slide-12">Slide 12: 6. DOM Traversal</a></li>
+            <li><a href="#slide-13">Slide 13: 7. set & getAttribute</a></li>
+            <li><a href="#slide-14">Slide 14: Peta Konsep</a></li>
+            <li><a href="#slide-15">Slide 15: Kesimpulan</a></li>
+            <li><a href="#slide-16">Slide 16: Live Demo</a></li>
+            <li><a href="#slide-17">Slide 17: Penutup</a></li>
+            <li><a href="#tanya-jawab" style="color: #38bdf8; font-weight: 600;">❓ Tanya Jawab (Q&A)</a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main>
+        <header class="main-header">
+            <span class="badge-pill">🎓 Bahan Presentasi Kuliah</span>
+            <h1>Panduan & Skrip Presentasi DOM</h1>
+            <p style="color: var(--text-muted);">Mata Kuliah Pemrograman Web — Implementasi DOM JavaScript pada Aplikasi TaskMate</p>
+            <div class="top-tip">
+                💡 <strong>Tips Presentasi:</strong> Skrip ini dirancang untuk gaya penyampaian santai, jelas, dan percaya diri. Anda tidak wajib menghafalnya kata demi kata—pahami poin utamanya lalu ceritakan dengan bahasa Anda sendiri!
+            </div>
+        </header>
+
+        <!-- Slide 1 -->
+        <article class="slide-section" id="slide-1">
+            <div class="slide-header">
+                <h3>🌐 Slide 1: Judul Presentasi</h3>
+                <span class="slide-badge">SLIDE 01</span>
+            </div>
+            <div class="speech-box">
+                <p>"Selamat pagi/siang bapak/ibu dosen dan teman-teman semuanya. Kami dari [Kelompok X] beranggotakan [Nama Anggota]. Pada hari ini, kami akan mempresentasikan materi tentang <strong>Document Object Model</strong> atau yang sering disingkat <strong>DOM</strong> pada JavaScript."</p>
+                <p>"Untuk mempermudah pemahaman kita bersama, kami juga telah membuat sebuah aplikasi web nyata bernama <strong>TaskMate</strong>—yaitu aplikasi To-Do List interaktif yang mendemonstrasikan implementasi konsep DOM tersebut."</p>
+            </div>
+            <div class="points-box">
+                <div class="points-title">📌 Poin Kunci yang Harus Disampaikan:</div>
+                <ul>
+                    <li>Salam pembuka dan perkenalan anggota kelompok.</li>
+                    <li>Sebutkan topik utama: DOM JavaScript.</li>
+                    <li>Perkenalkan studi kasus: Aplikasi To-Do List (TaskMate).</li>
+                </ul>
+            </div>
+        </article>
+
+        <!-- Slide 2 -->
+        <article class="slide-section" id="slide-2">
+            <div class="slide-header">
+                <h3>📖 Slide 2: Apa itu DOM?</h3>
+                <span class="slide-badge">SLIDE 02</span>
+            </div>
+            <div class="speech-box">
+                <p>"Pertama-tama, apa sebenarnya DOM itu? Secara sederhana, <strong>DOM (Document Object Model)</strong> adalah representasi terstruktur dari kode HTML kita yang dibentuk oleh browser menjadi <strong>pohon objek (tree of objects)</strong>."</p>
+                <p>"Kenapa DOM ini sangat penting? Karena DOM menjadi <strong>jembatan penghubung</strong> antara struktur HTML dan logika JavaScript. Berkat DOM, JavaScript memiliki kekuatan untuk membaca, mengubah teks, mengganti warna/style, sampai menambah dan menghapus komponen halaman secara langsung <strong>tanpa perlu me-reload halaman web</strong>."</p>
+            </div>
+            <div class="points-box">
+                <div class="points-title">📌 Poin Kunci yang Harus Disampaikan:</div>
+                <ul>
+                    <li>DOM membuat web menjadi dinamis dan interaktif.</li>
+                    <li>DOM adalah jembatan antara HTML dan JavaScript.</li>
+                    <li>Perubahan terjadi instan tanpa refresh browser.</li>
+                </ul>
+            </div>
+            <div class="extra-tip">
+                💡 <em>Jika ditanya dosen: "Kapan DOM dibuat?"</em><br>
+                Jawab: "DOM dibangun secara otomatis oleh browser tepat saat browser mem-parsing atau membaca file HTML."
+            </div>
+        </article>
+
+        <!-- Slide 3 -->
+        <article class="slide-section" id="slide-3">
+            <div class="slide-header">
+                <h3>🌳 Slide 3: Struktur DOM Tree</h3>
+                <span class="slide-badge">SLIDE 03</span>
+            </div>
+            <div class="speech-box">
+                <p>"Ketika browser membaca file HTML kita, browser akan menyusunnya menjadi sebuah pohon terbalik atau <strong>DOM Tree</strong>."</p>
+                <p>"Bisa kita lihat di diagram slide: Pada posisi paling puncak terdapat objek <strong>document</strong> sebagai akar (root). Di bawahnya terdapat elemen <code>&lt;html&gt;</code> yang bercabang menjadi dua anak utama, yaitu <code>&lt;head&gt;</code> dan <code>&lt;body&gt;</code>."</p>
+                <p>"Di aplikasi TaskMate kita, di dalam <code>&lt;body&gt;</code> terdapat header, form input, dan list <code>&lt;ul&gt;</code>. Setiap tag HTML menjadi satu cabang atau titik yang kita sebut <strong>Node</strong>. Karena tersusun rapi seperti silsilah keluarga, JavaScript bisa dengan mudah menunjuk bagian mana yang mau diubah."</p>
+            </div>
+            <div class="points-box">
+                <div class="points-title">📌 Poin Kunci yang Harus Disampaikan:</div>
+                <ul>
+                    <li>Hirarki: Root (document) &rarr; html &rarr; head/body &rarr; elemen anak.</li>
+                    <li>Hubungan antar elemen: Parent (induk), Child (anak), Sibling (saudara).</li>
+                </ul>
+            </div>
+        </article>
+
+        <!-- Slide 4 -->
+        <article class="slide-section" id="slide-4">
+            <div class="slide-header">
+                <h3>🔤 Slide 4: Jenis-Jenis Node</h3>
+                <span class="slide-badge">SLIDE 04</span>
+            </div>
+            <div class="speech-box">
+                <p>"Di dalam DOM Tree, setiap komponen disebut <strong>Node</strong>. Ada 4 tipe node utama yang wajib kita ketahui:"</p>
+                <p>"1. <strong>Document Node</strong>: Titik paling awal/puncak dari seluruh dokumen web.<br>
+                2. <strong>Element Node</strong>: Tag-tag HTML seperti <code>&lt;div&gt;</code>, <code>&lt;button&gt;</code>, <code>&lt;input&gt;</code>, dan <code>&lt;li&gt;</code>.<br>
+                3. <strong>Text Node</strong>: Teks aktual di dalam tag, misalnya tulisan 'TaskMate' di dalam judul.<br>
+                4. <strong>Attribute Node</strong>: Informasi pelengkap pada elemen, seperti <code>id</code>, <code>class</code>, atau <code>type</code>."</p>
+                <p>"Dalam pembuatan web, <em>Element Node</em> dan <em>Text Node</em> adalah yang paling sering kita manipulasi menggunakan JavaScript."</p>
+            </div>
+            <div class="points-box">
+                <div class="points-title">📌 Poin Kunci yang Harus Disampaikan:</div>
+                <ul>
+                    <li>Bedakan antara Element Node (wadahnya) dan Text Node (isinya).</li>
+                </ul>
+            </div>
+        </article>
+
+        <!-- Slide 5 -->
+        <article class="slide-section" id="slide-5">
+            <div class="slide-header">
+                <h3>✅ Slide 5: Studi Kasus (TaskMate)</h3>
+                <span class="slide-badge">SLIDE 05</span>
+            </div>
+            <div class="speech-box">
+                <p>"Untuk membuktikan implementasi konsep-konsep tersebut, kami membuat <strong>TaskMate</strong>."</p>
+                <p>"TaskMate adalah aplikasi manajemen tugas harian yang memiliki 6 fitur utama: Menambah tugas baru, Menandai tugas selesai, Mengedit nama dan prioritas tugas via modal, Menghapus tugas dengan animasi, Pencarian & filter real-time, serta Counter statistik & progress bar yang bergerak otomatis."</p>
+                <p>"Seluruh fungsionalitas ini <strong>100% menggunakan DOM JavaScript murni</strong> tanpa bantuan library atau framework tambahan."</p>
+            </div>
+            <div class="points-box">
+                <div class="points-title">📌 Poin Kunci yang Harus Disampaikan:</div>
+                <ul>
+                    <li>Aplikasi dibuat murni (Vanilla JavaScript).</li>
+                    <li>Sebutkan fitur-fiturnya secara ringkas dan lugas.</li>
+                </ul>
+            </div>
+        </article>
+
+        <!-- Slide 6 -->
+        <article class="slide-section" id="slide-6">
+            <div class="slide-header">
+                <h3>🔍 Slide 6: 1. Seleksi Elemen</h3>
+                <span class="slide-badge">SLIDE 06</span>
+            </div>
+            <div class="speech-box">
+                <p>"Langkah pertama sebelum kita bisa mengubah apapun di layar adalah <strong>memilih elemen target</strong>."</p>
+                <p>"Di JavaScript terdapat metode seleksi populer:"</p>
+                <p>"Pertama, <code>getElementById('form-tambah')</code>. Ini kita gunakan untuk mengambil elemen yang punya ID unik, seperti form dan kolom input."</p>
+                <p>"Kedua, <code>querySelector()</code> dan <code>querySelectorAll()</code>. Metode ini sangat fleksibel karena memakai format CSS Selector. Di TaskMate, kita memakai <code>querySelectorAll('.filter-btn')</code> untuk mengambil sekaligus ketiga tombol filter (Semua, Belum, Selesai) dalam bentuk NodeList."</p>
+            </div>
+            <div class="points-box">
+                <div class="points-title">📌 Poin Kunci yang Harus Disampaikan:</div>
+                <ul>
+                    <li><code>getElementById</code> &rarr; Sangat cepat, khusus ID unik.</li>
+                    <li><code>querySelector</code> &rarr; Elemen pertama yang cocok dengan CSS selector.</li>
+                    <li><code>querySelectorAll</code> &rarr; Mengembalikan semua elemen yang cocok (NodeList).</li>
+                </ul>
+            </div>
+        </article>
+
+        <!-- Slide 7 -->
+        <article class="slide-section" id="slide-7">
+            <div class="slide-header">
+                <h3>✏️ Slide 7: 2. Manipulasi Konten</h3>
+                <span class="slide-badge">SLIDE 07</span>
+            </div>
+            <div class="speech-box">
+                <p>"Setelah elemen berhasil kita seleksi, kita bisa memanipulasi isinya. Ada dua properti utama:"</p>
+                <p>"1. <strong>textContent</strong>: Digunakan untuk mengubah teks murni. Di TaskMate, kita gunakan untuk memperbarui angka total tugas, jumlah tugas selesai, dan label persentase."</p>
+                <p>"2. <strong>innerHTML</strong>: Mampu mem-parsing tag HTML. Kita gunakan <code>container.innerHTML = ''</code> untuk mengosongkan daftar sebelum me-render data yang baru."</p>
+                <p>"Selain itu, untuk elemen input form, kita menggunakan properti <strong>.value</strong> untuk membaca apa yang diketikkan user atau mengosongkannya kembali setelah tombol Tambah ditekan."</p>
+            </div>
+            <div class="points-box">
+                <div class="points-title">📌 Poin Kunci yang Harus Disampaikan:</div>
+                <ul>
+                    <li>Gunakan <code>textContent</code> untuk keamanan dari serangan XSS saat menampilkan teks biasa.</li>
+                    <li>Gunakan <code>.value</code> khusus elemen interaktif (input, textarea, select).</li>
+                </ul>
+            </div>
+        </article>
+
+        <!-- Slide 8 -->
+        <article class="slide-section" id="slide-8">
+            <div class="slide-header">
+                <h3>➕ Slide 8: 3. Membuat & Menghapus Elemen</h3>
+                <span class="slide-badge">SLIDE 08</span>
+            </div>
+            <div class="speech-box">
+                <p>"Fitur utama dari To-Do List adalah menambah dan menghapus baris tugas. Ini melibatkan metode DOM yang sangat krusial:"</p>
+                <p>"1. <code>document.createElement('li')</code>: Membuat elemen tag HTML baru di memori browser."<br>
+                2. Kita berikan class, atribut, dan teks pada elemen baru tersebut.<br>
+                3. <code>container.appendChild(li)</code>: Memasukkan elemen baru tersebut ke dalam parent <code>&lt;ul&gt;</code> sehingga langsung tampil di layar."</p>
+                <p>"Sedangkan untuk menghapus, kita cukup memanggil <code>elemen.remove()</code> sehingga elemen tersebut dicopot seketika dari DOM Tree."</p>
+            </div>
+            <div class="points-box">
+                <div class="points-title">📌 Poin Kunci yang Harus Disampaikan:</div>
+                <ul>
+                    <li>Alur: <code>createElement()</code> &rarr; atur isi &rarr; <code>appendChild()</code>.</li>
+                    <li>Penghapusan: <code>remove()</code> untuk mencabut node dari pohon.</li>
+                </ul>
+            </div>
+        </article>
+
+        <!-- Slide 9 -->
+        <article class="slide-section" id="slide-9">
+            <div class="slide-header">
+                <h3>🎨 Slide 9: 4. Manipulasi Style & Class</h3>
+                <span class="slide-badge">SLIDE 09</span>
+            </div>
+            <div class="speech-box">
+                <p>"Untuk memberikan efek visual yang responsif, DOM menyediakan manipulasi styling:"</p>
+                <p>"Pertama melalui <strong>classList</strong>. Ini praktik terbaik untuk menambah atau mencopot class CSS. Contohnya, saat user mengklik checkbox, JavaScript mengeksekusi <code>li.classList.add('selesai')</code>. Seketika CSS akan memberikan coretan teks dan menurunkan opasitas."</p>
+                <p>"Kedua melalui <strong>element.style</strong>. Di TaskMate, kita pakai untuk progress bar dinamis: <code>progressFill.style.width = persen + '%'</code>. Panjang barnya langsung memanjang atau memendek secara mulus mengikuti kalkulasi persentase."</p>
+            </div>
+            <div class="points-box">
+                <div class="points-title">📌 Poin Kunci yang Harus Disampaikan:</div>
+                <ul>
+                    <li><code>classList.add/remove/toggle</code> memisahkan logika JS dan style CSS.</li>
+                    <li><code>element.style</code> untuk nilai dinamis yang berubah-ubah (seperti persentase bar).</li>
+                    <li>Ingat aturan camelCase (misal: <code>backgroundColor</code>).</li>
+                </ul>
+            </div>
+        </article>
+
+        <!-- Slide 10 -->
+        <article class="slide-section" id="slide-10">
+            <div class="slide-header">
+                <h3>⚡ Slide 10: 5. Event Handling</h3>
+                <span class="slide-badge">SLIDE 10</span>
+            </div>
+            <div class="speech-box">
+                <p>"Aplikasi web tidak akan bisa berinteraksi tanpa adanya <strong>Event Handling</strong>. Event adalah aksi yang dilakukan pengguna, seperti mengklik tombol, mengetik, atau menekan tombol keyboard."</p>
+                <p>"Kita menggunakan <code>addEventListener()</code>. Sebagai contoh pada form penambahan tugas, kita mendengarkan event <code>'submit'</code>."</p>
+                <p>"Sangat penting di sini kita memanggil <code>e.preventDefault()</code>. Mengapa? Karena tabiat default form HTML ketika disubmit adalah me-refresh seluruh halaman. Dengan <code>preventDefault()</code>, reload tersebut kita hentikan agar data dimasukkan secara mulus tanpa kedip."</p>
+            </div>
+            <div class="points-box">
+                <div class="points-title">📌 Poin Kunci yang Harus Disampaikan:</div>
+                <ul>
+                    <li>Fungsi <code>addEventListener</code> untuk menangkap aksi pengguna.</li>
+                    <li>Pentingnya <code>preventDefault()</code> pada submit form.</li>
+                </ul>
+            </div>
+        </article>
+
+        <!-- Slide 11 -->
+        <article class="slide-section" id="slide-11">
+            <div class="slide-header">
+                <h3>⚡ Slide 11: Jenis Event di TaskMate</h3>
+                <span class="slide-badge">SLIDE 11</span>
+            </div>
+            <div class="speech-box">
+                <p>"Berikut adalah ringkasan event yang kami terapkan di aplikasi TaskMate:"</p>
+                <p>"1. <strong>submit</strong>: Pada form saat user menambah tugas.<br>
+                2. <strong>click</strong>: Pada checkbox, tombol filter, tombol edit, dan tombol hapus.<br>
+                3. <strong>input</strong>: Pada kolom pencarian. Event ini langsung mendeteksi setiap ketikan karakter sehingga filter pencarian berjalan real-time.<br>
+                4. <strong>keydown</strong>: Menangkap tombol keyboard. Kami pasang untuk tombol 'Escape' agar user bisa menutup pop-up modal edit dengan praktis."</p>
+            </div>
+        </article>
+
+        <!-- Slide 12 -->
+        <article class="slide-section" id="slide-12">
+            <div class="slide-header">
+                <h3>🌳 Slide 12: 6. DOM Traversal</h3>
+                <span class="slide-badge">SLIDE 12</span>
+            </div>
+            <div class="speech-box">
+                <p>"DOM Traversal adalah kemampuan berpindah dari satu elemen ke elemen lainnya berdasarkan relasi pohonnya."</p>
+                <p>"Contoh nyatanya: Saat user menekan tombol icon sampah di baris tugas, tombol itu memanggil event. Melalui <code>button.parentElement</code>, JavaScript dapat langsung mengetahui elemen <code>&lt;li&gt;</code> induknya untuk kemudian dihapus."</p>
+                <p>"Contoh lain, kita menggunakan <code>parent.children.length</code> untuk menghitung berapa banyak tugas yang sedang aktif di dalam kontainer."</p>
+            </div>
+            <div class="points-box">
+                <div class="points-title">📌 Poin Kunci yang Harus Disampaikan:</div>
+                <ul>
+                    <li>Navigasi ke atas: <code>parentElement</code>.</li>
+                    <li>Navigasi ke bawah: <code>children</code>, <code>firstElementChild</code>.</li>
+                </ul>
+            </div>
+        </article>
+
+        <!-- Slide 13 -->
+        <article class="slide-section" id="slide-13">
+            <div class="slide-header">
+                <h3>🏷️ Slide 13: 7. setAttribute & getAttribute</h3>
+                <span class="slide-badge">SLIDE 13</span>
+            </div>
+            <div class="speech-box">
+                <p>"Dalam mengelola data dinamis, kita sering butuh menyimpan ID unik pada elemen HTML. Kami menggunakan <strong>HTML5 Data Attributes</strong>."</p>
+                <p>"Saat baris tugas dibuat, kita pasang atribut <code>li.setAttribute('data-id', tugas.id)</code>. Sehingga ketika tombol edit atau hapus diklik, program dengan mudah membaca <code>getAttribute('data-id')</code> untuk mencocokkan tugas mana di database array yang harus dimodifikasi."</p>
+            </div>
+        </article>
+
+        <!-- Slide 14 -->
+        <article class="slide-section" id="slide-14">
+            <div class="slide-header">
+                <h3>🗺️ Slide 14: Peta Konsep DOM di TaskMate</h3>
+                <span class="slide-badge">SLIDE 14</span>
+            </div>
+            <div class="speech-box">
+                <p>"Tabel pada slide 14 ini merangkum keterkaitan utuh antara fitur aplikasi dan konsep DOM:"</p>
+                <p>"Ketika menambah tugas, DOM yang bekerja adalah <em>createElement, appendChild, dan preventDefault</em>. Ketika menandai selesai, yang bekerja adalah <em>classList</em>. Ketika pencarian, yang bekerja adalah <em>input event</em> dan <em>innerHTML</em>. Dan ketika menghitung progres, yang bekerja adalah <em>textContent</em> dan <em>style.width</em>."</p>
+                <p>"Tabel ini membuktikan bahwa sebuah aplikasi fungsional yang sederhana sekalipun terbangun dari kombinasi berbagai metode DOM."</p>
+            </div>
+        </article>
+
+        <!-- Slide 15 -->
+        <article class="slide-section" id="slide-15">
+            <div class="slide-header">
+                <h3>📝 Slide 15: Kesimpulan</h3>
+                <span class="slide-badge">SLIDE 15</span>
+            </div>
+            <div class="speech-box">
+                <p>"Sebagai kesimpulan presentasi hari ini:"</p>
+                <p>"DOM adalah fondasi dari seluruh pengembangan web interaktif modern. Setiap interaksi yang sering kita nikmati di internet—mulai dari klik tombol, munculnya pop-up, form validasi, hingga animasi antarmuka—semuanya bertumpu pada kemampuan JavaScript dalam memanipulasi DOM Tree."</p>
+                <p>"Dengan menguasai 7 pilar DOM ini: Seleksi, Manipulasi Konten, Modifikasi Struktur, Styling, Event Handling, Traversal, dan Pengelolaan Atribut, kita sudah memiliki modal kuat untuk membangun aplikasi web yang dinamis."</p>
+            </div>
+        </article>
+
+        <!-- Slide 16 -->
+        <article class="slide-section" id="slide-16">
+            <div class="slide-header">
+                <h3>🚀 Slide 16: Panduan Live Demo</h3>
+                <span class="slide-badge">SLIDE 16</span>
+            </div>
+            <div class="speech-box">
+                <p>"Sekarang, izinkan kami mendemonstrasikan langsung aplikasi TaskMate di browser untuk melihat DOM bekerja secara nyata."</p>
+            </div>
+            <div class="points-box">
+                <div class="points-title">📋 Urutan Langkah Demo yang Perlu Ditunjukkan:</div>
+                <ul class="step-list">
+                    <li class="step-item">
+                        <div class="step-content">
+                            <strong>1. Buka index.html di Browser</strong>
+                            Tunjukkan tampilan awal yang bersih dengan dark mode.
+                        </div>
+                    </li>
+                    <li class="step-item">
+                        <div class="step-content">
+                            <strong>2. Tambahkan Tugas Baru</strong>
+                            Ketik misalnya: "Belajar DOM JavaScript", pilih prioritas Tinggi &rarr; Klik Tambah.<br>
+                            <em>Jelaskan: "Ini menggunakan createElement dan appendChild, serta form preventDefault."</em>
+                        </div>
+                    </li>
+                    <li class="step-item">
+                        <div class="step-content">
+                            <strong>3. Tambahkan 2 tugas lagi dengan prioritas berbeda</strong>
+                            Tunjukkan total counter langsung ter-update (menggunakan textContent).
+                        </div>
+                    </li>
+                    <li class="step-item">
+                        <div class="step-content">
+                            <strong>4. Klik Checkbox untuk Menyelesaikan Tugas</strong>
+                            Tunjukkan teks tercoret dan progress bar bertambah secara otomatis.<br>
+                            <em>Jelaskan: "Ini menggunakan classList.add('selesai') dan style.width untuk barnya."</em>
+                        </div>
+                    </li>
+                    <li class="step-item">
+                        <div class="step-content">
+                            <strong>5. Uji Kolom Pencarian</strong>
+                            Ketik kata kunci &rarr; daftar otomatis menyaring secara instan.<br>
+                            <em>Jelaskan: "Ini dipicu oleh event 'input'."</em>
+                        </div>
+                    </li>
+                    <li class="step-item">
+                        <div class="step-content">
+                            <strong>6. Uji Tombol Edit & Modal</strong>
+                            Klik icon pensil &rarr; modal edit muncul. Ubah nama & simpan.<br>
+                            <em>Jelaskan: "Modal muncul dengan menambahkan class 'tampil'."</em>
+                        </div>
+                    </li>
+                    <li class="step-item">
+                        <div class="step-content">
+                            <strong>7. Uji Tombol Hapus</strong>
+                            Klik icon tempat sampah &rarr; baris tugas meluncur keluar dan hilang.<br>
+                            <em>Jelaskan: "Ini memicu animasi sebelum fungsi .remove() dipanggil."</em>
+                        </div>
+                    </li>
+                    <li class="step-item">
+                        <div class="step-content">
+                            <strong>8. Refresh Halaman (F5)</strong>
+                            Tunjukkan bahwa data tidak hilang karena tersimpan di <code>localStorage</code>.
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </article>
+
+        <!-- Slide 17 -->
+        <article class="slide-section" id="slide-17">
+            <div class="slide-header">
+                <h3>🙏 Slide 17: Penutup</h3>
+                <span class="slide-badge">SLIDE 17</span>
+            </div>
+            <div class="speech-box">
+                <p>"Demikian presentasi dari kelompok kami mengenai implementasi DOM JavaScript pada aplikasi TaskMate. Kami membuka sesi tanya jawab jika ada tanggapan, kritik, atau pertanyaan dari bapak/ibu dosen dan rekan-rekan sekalian. Terima kasih atas perhatiannya."</p>
+            </div>
+        </article>
+
+        <!-- Q&A Cheat Sheet -->
+        <article class="slide-section" id="tanya-jawab" style="border-color: #38bdf8;">
+            <div class="slide-header">
+                <h3 style="color: #38bdf8;">❓ Lembar Jawaban Cepat Sesi Tanya Jawab (Q&A)</h3>
+                <span class="slide-badge" style="background: rgba(56, 189, 248, 0.2); color: #38bdf8;">CHEAT SHEET</span>
+            </div>
+
+            <div class="qa-card">
+                <h4>Q1: Apa bedanya file HTML statis dengan DOM?</h4>
+                <p><strong>Jawaban:</strong> "File HTML adalah teks kode mentah yang tersimpan di disk. Sedangkan DOM adalah objek hidup di memori browser yang dihasilkan dari proses parsing HTML tersebut. JavaScript tidak bisa mengubah file HTML asli di server, tapi JavaScript bisa mengubah DOM di browser user."</p>
+            </div>
+
+            <div class="qa-card">
+                <h4>Q2: Kenapa lebih memilih textContent dibanding innerHTML untuk menampilkan data teks?</h4>
+                <p><strong>Jawaban:</strong> "Karena aspek keamanan. <code>innerHTML</code> akan mengeksekusi tag HTML apa saja termasuk tag <code>&lt;script&gt;</code> yang rawan disisipi kode berbahaya (Cross-Site Scripting / XSS). Sedangkan <code>textContent</code> murni memperlakukan input sebagai teks string biasa, sehingga jauh lebih aman dan performanya lebih cepat."</p>
+            </div>
+
+            <div class="qa-card">
+                <h4>Q3: Apa fungsi e.preventDefault() pada form?</h4>
+                <p><strong>Jawaban:</strong> "Secara default saat form HTML disubmit, browser akan mengirimkan request HTTP GET/POST dan me-refresh seluruh halaman web. Karena kita membuat Single Page Application sederhana, kita mencegah reload tersebut menggunakan <code>preventDefault()</code> agar eksekusi data ditangani langsung oleh JavaScript tanpa reload."</p>
+            </div>
+
+            <div class="qa-card">
+                <h4>Q4: Mengapa menggunakan classList daripada langsung mengubah element.style?</h4>
+                <p><strong>Jawaban:</strong> "Prinsip <em>Separation of Concerns</em> (Pemisahan Tugas). Lebih baik semua urusan desain/style disimpan di file CSS, dan JavaScript hanya bertugas memasang atau mencabut nama class-nya melalui <code>classList</code>. Kecuali untuk nilai dinamis yang berubah-ubah secara matematis seperti panjang progress bar."</p>
+            </div>
+        </article>
+    </main>
+
+    <a href="#" class="btn-top">⬆️ Kembali ke Atas</a>
+
+</body>
+</html>

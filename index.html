@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskMate — To-Do List</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <h1>✅ TaskMate</h1>
+            <p class="app-tagline">Kelola tugas harianmu dengan mudah</p>
+        </header>
+
+        <!-- Input Tambah Tugas -->
+        <form id="form-tambah" class="form-tambah">
+            <input 
+                type="text" 
+                id="input-tugas" 
+                placeholder="Tulis tugas baru..." 
+                autocomplete="off"
+                required
+            >
+            <select id="input-prioritas">
+                <option value="rendah">🟢 Rendah</option>
+                <option value="sedang" selected>🟡 Sedang</option>
+                <option value="tinggi">🔴 Tinggi</option>
+            </select>
+            <button type="submit" id="btn-tambah">+ Tambah</button>
+        </form>
+
+        <!-- Statistik -->
+        <div class="statistik">
+            <div class="stat-item">
+                <span class="stat-angka" id="stat-total">0</span>
+                <span class="stat-label">Total</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-angka" id="stat-selesai">0</span>
+                <span class="stat-label">Selesai</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-angka" id="stat-belum">0</span>
+                <span class="stat-label">Belum</span>
+            </div>
+            <div class="stat-item">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+                <span class="stat-label" id="progress-label">0%</span>
+            </div>
+        </div>
+
+        <!-- Filter & Pencarian -->
+        <div class="toolbar">
+            <div class="filter-group">
+                <button class="filter-btn active" data-filter="semua">Semua</button>
+                <button class="filter-btn" data-filter="belum">Belum</button>
+                <button class="filter-btn" data-filter="selesai">Selesai</button>
+            </div>
+            <input 
+                type="text" 
+                id="input-cari" 
+                placeholder="🔍 Cari tugas..." 
+                class="input-cari"
+            >
+        </div>
+
+        <!-- Daftar Tugas -->
+        <ul id="daftar-tugas" class="daftar-tugas">
+            <!-- Item tugas akan di-generate oleh JavaScript -->
+        </ul>
+
+        <!-- Pesan Kosong -->
+        <div id="pesan-kosong" class="pesan-kosong">
+            <span class="pesan-icon">📭</span>
+            <p>Belum ada tugas. Yuk mulai tambahkan!</p>
+        </div>
+
+        <!-- Tombol Hapus Semua -->
+        <div class="footer-actions">
+            <button id="btn-hapus-selesai" class="btn-hapus-selesai" style="display:none;">
+                🗑️ Hapus Tugas Selesai
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal Edit -->
+    <div id="modal-edit" class="modal-overlay">
+        <div class="modal-content">
+            <h3>✏️ Edit Tugas</h3>
+            <input type="text" id="edit-input" class="edit-input" placeholder="Nama tugas...">
+            <select id="edit-prioritas" class="edit-prioritas">
+                <option value="rendah">🟢 Rendah</option>
+                <option value="sedang">🟡 Sedang</option>
+                <option value="tinggi">🔴 Tinggi</option>
+            </select>
+            <div class="modal-actions">
+                <button id="btn-simpan-edit" class="btn-simpan">💾 Simpan</button>
+                <button id="btn-batal-edit" class="btn-batal">Batal</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
